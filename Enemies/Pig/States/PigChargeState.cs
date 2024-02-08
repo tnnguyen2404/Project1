@@ -19,6 +19,11 @@ public class PigChargeState : PigBaseState
 
     public override void PhysicsUpdate() {
         base.PhysicsUpdate();
+        if (!pig.CheckForPlayer()) {
+            pig.SwitchState(pig.patrolState);
+        } else {
+            Charge();
+        }
     }
 
     public override void Exit() {

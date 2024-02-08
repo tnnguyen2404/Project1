@@ -25,10 +25,16 @@ public class PigPatrolState : PigBaseState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        if (pig.facingDirection == 1) {
-            pig.rb.velocity = new Vector2(pig.moveSpeed, pig.rb.velocity.y);
-        } else {
-            pig.rb.velocity = new Vector2(-pig.moveSpeed, pig.rb.velocity.y);
+        if (pig.CheckForGround()) {
+            if (pig.facingDirection == -1) {
+                pig.rb.velocity = new Vector2(pig.moveSpeed, pig.rb.velocity.y);
+            } else {
+                pig.rb.velocity = new Vector2(-pig.moveSpeed, pig.rb.velocity.y);
+            }
+        }
+
+        if (pig.CheckForPlayer()) {
+            pig.SwitchState(pig.detectPlayerState);
         }
     }
 

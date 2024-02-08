@@ -14,7 +14,7 @@ public class PigController : MonoBehaviour
     public LayerMask whatIsGround, whatIsPlayer;
     public Transform groundCheck, wallCheck;
     public GameObject alert;
-    public float groundCheckRadius, wallCheckDistance, playerDetectDistance;
+    public float groundCheckDistance, wallCheckDistance, playerDetectDistance;
 
     [Header("PigData")]
     public int health;
@@ -22,7 +22,7 @@ public class PigController : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     public float chargeSpeed;
-    public int facingDirection;
+    public int facingDirection = 1;
 
     [Header("Boolean")]
     public bool isGrounded;
@@ -76,13 +76,8 @@ public class PigController : MonoBehaviour
     }
 
     public bool CheckForGround() {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+        isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
         return isGrounded;
-    }
-
-    IEnumerator DetectedPlayer() {
-        Debug.Log("Player detected!");
-        yield return new WaitForSeconds(1);
     }
 
     public void HandleAnimation() {
@@ -99,6 +94,7 @@ public class PigController : MonoBehaviour
 
     void OnDrawGizmos() {
         Gizmos.DrawRay(wallCheck.position, (isFacingRight ? Vector2.right : Vector2.left) * playerDetectDistance);
+        Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
     }
     #endregion
 }

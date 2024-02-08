@@ -18,13 +18,11 @@ public class PigDetectPlayerState : PigBaseState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (!pig.CheckForPlayer()) {
-            pig.SwitchState(pig.idleState);
-        } else {
-            if (Time.time >= pig.stateTime + pig.playerDetectedWaitTime) {
-                pig.SwitchState(pig.chargeState);
-            }
+        if (Time.time >= pig.stateTime + pig.playerDetectedWaitTime) {
+            pig.rb.velocity = new Vector2(0f, pig.rb.velocity.y);
+            pig.SwitchState(pig.chargeState);
         }
+        
     }
 
     public override void PhysicsUpdate()
