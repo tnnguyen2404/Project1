@@ -27,9 +27,9 @@ public class PigPatrolState : PigBaseState
         base.PhysicsUpdate();
         if (pig.CheckForGround()) {
             if (pig.facingDirection == -1) {
-                pig.rb.velocity = new Vector2(pig.moveSpeed, pig.rb.velocity.y);
+                pig.rb.velocity = new Vector2(pig.stats.moveSpeed, pig.rb.velocity.y);
             } else {
-                pig.rb.velocity = new Vector2(-pig.moveSpeed, pig.rb.velocity.y);
+                pig.rb.velocity = new Vector2(-pig.stats.moveSpeed, pig.rb.velocity.y);
             }
         }
 

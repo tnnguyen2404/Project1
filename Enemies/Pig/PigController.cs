@@ -9,21 +9,16 @@ public class PigController : MonoBehaviour
     public PigChargeState chargeState;
     public PigPatrolState patrolState;
     public PigDetectPlayerState detectPlayerState;
+    public PigAttackState attackState;
     public Rigidbody2D rb;
     private Animation anim;
-    public LayerMask whatIsGround, whatIsPlayer;
+    public LayerMask whatIsGround, whatIsPlayer, whatIsDamageable;
     public Transform groundCheck, wallCheck;
+    public Transform attackHitBoxPos;
     public GameObject alert;
-    public float groundCheckDistance, wallCheckDistance, playerDetectDistance;
-
-    [Header("PigData")]
-    public int health;
-    public int damage;
-    public float moveSpeed;
-    public float jumpForce;
-    public float chargeSpeed;
+    public StatsSO stats;
     public int facingDirection = 1;
-
+    
     [Header("Boolean")]
     public bool isGrounded;
     public bool isTouchingWall;
@@ -33,11 +28,8 @@ public class PigController : MonoBehaviour
     public bool isAttacking;
     public bool isFacingRight;
     public bool playerDetected;
-
-    [Header("Detection State")]
-    public float detectionPauseTime;
-    public float playerDetectedWaitTime = 1;
-
+    public bool playerInAttackRange;
+    
     [Header("State")]
     public float stateTime;
 
@@ -47,6 +39,8 @@ public class PigController : MonoBehaviour
         idleState = new PigIdleState(this, "Idle");
         detectPlayerState = new PigDetectPlayerState(this, "Detection");
         chargeState = new PigChargeState(this, "Charge");
+        attackState = new PigAttackState(this, "Attack");
+
 
         currentState = patrolState;
         currentState.Enter();
@@ -66,22 +60,23 @@ public class PigController : MonoBehaviour
     }
 
     public bool CheckForPlayer() {
-        playerDetected = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, playerDetectDistance, whatIsPlayer);
+        playerDetected = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.playerDetectDistance, whatIsPlayer);
         return playerDetected;
     }
 
     public bool CheckForWall() {
-        isTouchingWall = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, wallCheckDistance, whatIsGround);
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.wallCheckDistance, whatIsGround);
         return isTouchingWall;
     }
 
     public bool CheckForGround() {
-        isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+        isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, stats.groundCheckDistance, whatIsGround);
         return isGrounded;
     }
 
-    public void HandleAnimation() {
-
+    public bool CheckForAttackRange() {
+        playerInAttackRange = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.attackRange, whatIsPlayer);
+        return playerInAttackRange;
     }
 
     #region Other Functions
@@ -93,8 +88,8 @@ public class PigController : MonoBehaviour
     }
 
     void OnDrawGizmos() {
-        Gizmos.DrawRay(wallCheck.position, (isFacingRight ? Vector2.right : Vector2.left) * playerDetectDistance);
-        Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
+        Gizmos.DrawRay(wallCheck.position, (isFacingRight ? Vector2.right : Vector2.left) * 2);
+        Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - 0.14f));
     }
     #endregion
 }

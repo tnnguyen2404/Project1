@@ -22,6 +22,9 @@ public class PigChargeState : PigBaseState
         if (!pig.CheckForPlayer()) {
             pig.SwitchState(pig.patrolState);
         } else {
+            if (pig.CheckForAttackRange()) {
+                pig.SwitchState(pig.attackState);
+            }
             Charge();
         }
     }
@@ -31,6 +34,6 @@ public class PigChargeState : PigBaseState
     }
 
     void Charge() {
-        pig.rb.velocity = new Vector2(pig.chargeSpeed * pig.facingDirection, pig.rb.velocity.y);
+        pig.rb.velocity = new Vector2(pig.stats.chargeSpeed * -pig.facingDirection, pig.rb.velocity.y);
     }
 }
