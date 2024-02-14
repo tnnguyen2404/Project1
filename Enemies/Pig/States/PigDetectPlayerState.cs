@@ -33,5 +33,6 @@ public class PigDetectPlayerState : PigBaseState
     public override void Exit()
     {
         pig.alert.SetActive(false);
+        base.Exit();
     }
 }

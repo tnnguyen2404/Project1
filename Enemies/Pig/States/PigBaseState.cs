@@ -15,7 +15,7 @@ public class PigBaseState
     }
 
     public virtual void Enter() {
-
+        pig.anim.SetBool(animName, true);
     }
 
     public virtual void LogicUpdate() {
@@ -27,6 +27,14 @@ public class PigBaseState
     }
 
     public virtual void Exit() {
+        pig.anim.SetBool(animName, false);
+    }
+
+    public virtual void AnimationAttackTrigger() {
+
+    }
+
+    public virtual void AnimaitonFinishedTrigger() {
         
     }
 }

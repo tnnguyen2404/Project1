@@ -12,13 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e927033f1344b60469a953a685d27548, type: 3}
   m_Name: Pig
   m_EditorClassIdentifier: 
-  groundCheckDistance: 0
-  wallCheckDistance: 0
-  moveSpeed: 0
-  damage: 0
-  health: 0
-  jumpForce: 0
-  chargeSpeed: 0
-  playerDetectDistance: 0
-  playerDetectedWaitTime: 0
-  detectionPauseTime: 0
+  groundCheckDistance: 0.14
+  wallCheckDistance: 3
+  moveSpeed: 3
+  attackDamage: 0
+  attackRange: 0
+  attackRadius: 0
+  attackDetails:
+  - 0
+  - 0
+  health: 60
+  jumpForce: 7
+  chargeSpeed: 4
+  playerDetectDistance: 2
+  playerDetectedWaitTime: 1.5
+  detectionPauseTime: 1

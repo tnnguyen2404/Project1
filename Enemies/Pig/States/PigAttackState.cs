@@ -12,13 +12,6 @@ public class PigAttackState : PigBaseState
     public override void Enter()
     {
         base.Enter();
-        Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(pig.attackHitBoxPos.position, pig.stats.attackRadius, pig.whatIsDamageable);
-        pig.stats.attackDetails[0] = pig.stats.attackDamage;
-        pig.stats.attackDetails[1] = pig.transform.position.x;
-
-        foreach (Collider2D collider in detectedObjects) {
-            collider.transform.parent.SendMessage("Damage", pig.stats.attackDetails);
-        }
     }
 
     public override void LogicUpdate()
@@ -34,6 +27,24 @@ public class PigAttackState : PigBaseState
     public override void Exit()
     {
         base.Exit();
+    }
+
+    public override void AnimationAttackTrigger()
+    {
+        base.AnimationAttackTrigger();
+        Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(pig.attackHitBoxPos.position, pig.stats.attackRadius, pig.whatIsDamageable);
+        pig.stats.attackDetails[0] = pig.stats.attackDamage;
+        pig.stats.attackDetails[1] = pig.transform.position.x;
+
+        foreach (Collider2D collider in detectedObjects) {
+            collider.transform.parent.SendMessage("TakeDamage", pig.stats.attackDetails);
+        }
+    }
+
+    public override void AnimaitonFinishedTrigger()
+    {
+        base.AnimaitonFinishedTrigger();
+        pig.SwitchState(pig.patrolState);
     }
 
 }

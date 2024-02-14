@@ -17,7 +17,7 @@ public class StatsSO : ScriptableObject
     public float[] attackDetails = new float[2];
 
     [Header("Get Hit State")]
-    public int health;
+    public float health;
     
     [Header("Jump State")]
     public float jumpForce;
@@ -28,6 +28,5 @@ public class StatsSO : ScriptableObject
     [Header("Player Detection State")]
     public float playerDetectDistance;
     public float playerDetectedWaitTime;
-    public float detectionPauseTime;
-    
+    public float detectionPauseTime;  
 }

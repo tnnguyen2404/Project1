@@ -10,8 +10,9 @@ public class PigController : MonoBehaviour
     public PigPatrolState patrolState;
     public PigDetectPlayerState detectPlayerState;
     public PigAttackState attackState;
+    public PigGetHitState getHitState;
     public Rigidbody2D rb;
-    private Animation anim;
+    public Animator anim;
     public LayerMask whatIsGround, whatIsPlayer, whatIsDamageable;
     public Transform groundCheck, wallCheck;
     public Transform attackHitBoxPos;
@@ -40,6 +41,7 @@ public class PigController : MonoBehaviour
         detectPlayerState = new PigDetectPlayerState(this, "Detection");
         chargeState = new PigChargeState(this, "Charge");
         attackState = new PigAttackState(this, "Attack");
+        getHitState = new PigGetHitState(this, "GetHit");
 
 
         currentState = patrolState;
@@ -48,7 +50,7 @@ public class PigController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animation>();
+        anim = GetComponent<Animator>();
     }
     void Update()
     {
@@ -57,6 +59,10 @@ public class PigController : MonoBehaviour
 
     void FixedUpdate() {
         currentState.PhysicsUpdate();
+    }
+
+    void TakeDamage(float[] attackDetails) {
+        stats.health -= attackDetails[0];
     }
 
     public bool CheckForPlayer() {
@@ -85,6 +91,14 @@ public class PigController : MonoBehaviour
         currentState = newState;
         currentState.Enter();
         stateTime = Time.time;
+    }
+
+    public void AnimationAttackTrigger() {
+
+    }
+
+    public void AnimaitonFinishedTrigger() {
+
     }
 
     void OnDrawGizmos() {
