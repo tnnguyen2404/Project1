@@ -7,24 +7,29 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator anim;
+
+    public PigController pigEnemy;
     private float inputRaw = 0f;
     private bool isAlive;
     private bool isMoving;
     private bool isJumping;
     private bool isAttacking;
     private bool isFacingRight;
-    private int health = 90;
+    private float health = 90;
     private int attackDamage = 20;
     private float[] attackDetails = new float[2];
+    private int enemyFacingDirection;
     public int facingDirection = 1;
     public float groundCheckRadius;
     public Transform GroundCheck;
     public Transform AttackHitPosBox;
     public LayerMask whatIsGround, whatIsDamageable;
     [SerializeField] bool isGrounded;
+    [SerializeField] bool applyKnockBack;
     [SerializeField] private float attackRadius;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float knockBackSpeedX, knockBackSpeedY;
 
     void Start()
     {
@@ -104,6 +109,24 @@ public class PlayerController : MonoBehaviour
         foreach (Collider2D collider in detectedObjects) {
             collider.transform.parent.SendMessage("Damage", attackDetails);
         }
+    }
+
+    void TakeDamage(float[] attackDetails) {
+        health -= attackDetails[0];
+        enemyFacingDirection = pigEnemy.GetFacingDirection();
+        if (applyKnockBack && health > 0.0f) {
+            KnockBack();
+        } else {
+            Die();
+        }
+    }
+
+    void KnockBack() {
+        rb.velocity = new Vector2(knockBackSpeedX * enemyFacingDirection, knockBackSpeedY);
+    }
+
+    void Die() {
+        Destroy(gameObject);
     }
 
     void FlipSprite() {

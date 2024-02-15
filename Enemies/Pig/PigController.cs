@@ -60,11 +60,6 @@ public class PigController : MonoBehaviour
     void FixedUpdate() {
         currentState.PhysicsUpdate();
     }
-
-    void TakeDamage(float[] attackDetails) {
-        stats.health -= attackDetails[0];
-    }
-
     public bool CheckForPlayer() {
         playerDetected = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.playerDetectDistance, whatIsPlayer);
         return playerDetected;
@@ -99,6 +94,10 @@ public class PigController : MonoBehaviour
 
     public void AnimaitonFinishedTrigger() {
 
+    }
+
+    public int GetFacingDirection() {
+        return facingDirection;
     }
 
     void OnDrawGizmos() {
