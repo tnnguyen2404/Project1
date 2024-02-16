@@ -45,7 +45,7 @@ public class PigAttackState : PigBaseState
     public override void AnimaitonFinishedTrigger()
     {
         base.AnimaitonFinishedTrigger();
-        pig.SwitchState(pig.patrolState);
+        pig.SwitchState(pig.idleState);
     }
 
 }

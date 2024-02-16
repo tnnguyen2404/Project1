@@ -18,7 +18,6 @@ public class PigDetectPlayerState : PigBaseState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        pig.rb.velocity = new Vector2(0f, pig.rb.velocity.y);
         if (Time.time >= pig.stateTime + pig.stats.playerDetectedWaitTime) {
             pig.SwitchState(pig.chargeState);
         }

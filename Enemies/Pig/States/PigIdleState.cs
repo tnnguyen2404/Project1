@@ -16,6 +16,9 @@ public class PigIdleState : PigBaseState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        if (pig.CheckForPlayer()) {
+            pig.SwitchState(pig.detectPlayerState);
+        }
     }
 
     public override void PhysicsUpdate()

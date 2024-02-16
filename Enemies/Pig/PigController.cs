@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
 
 public class PigController : MonoBehaviour
 {
@@ -16,9 +18,12 @@ public class PigController : MonoBehaviour
     public LayerMask whatIsGround, whatIsPlayer, whatIsDamageable;
     public Transform groundCheck, wallCheck;
     public Transform attackHitBoxPos;
+    public Transform player;
     public GameObject alert;
     public StatsSO stats;
     public int facingDirection = 1;
+    public Vector2 startPos;
+    public Vector2 curPos;
     
     [Header("Boolean")]
     public bool isGrounded;
@@ -36,7 +41,7 @@ public class PigController : MonoBehaviour
 
     void Awake() 
     {
-        patrolState = new PigPatrolState(this, "Patrol");
+        //patrolState = new PigPatrolState(this, "Patrol");
         idleState = new PigIdleState(this, "Idle");
         detectPlayerState = new PigDetectPlayerState(this, "Detection");
         chargeState = new PigChargeState(this, "Charge");
@@ -44,13 +49,14 @@ public class PigController : MonoBehaviour
         getHitState = new PigGetHitState(this, "GetHit");
 
 
-        currentState = patrolState;
+        currentState = idleState;
         currentState.Enter();
     }
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        startPos = transform.position;
     }
     void Update()
     {
@@ -89,11 +95,11 @@ public class PigController : MonoBehaviour
     }
 
     public void AnimationAttackTrigger() {
-
+        currentState.AnimationAttackTrigger();
     }
 
     public void AnimaitonFinishedTrigger() {
-
+        currentState.AnimaitonFinishedTrigger();
     }
 
     public int GetFacingDirection() {
@@ -103,6 +109,7 @@ public class PigController : MonoBehaviour
     void OnDrawGizmos() {
         Gizmos.DrawRay(wallCheck.position, (isFacingRight ? Vector2.right : Vector2.left) * 2);
         Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - 0.14f));
+        Gizmos.DrawWireSphere(attackHitBoxPos.position, stats.attackRadius);
     }
     #endregion
 }

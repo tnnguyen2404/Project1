@@ -24,6 +24,8 @@ public class StatsSO : ScriptableObject
 
     [Header("Charge State")]
     public float chargeSpeed;
+    public float chargeTime;
+    public float chargeDuration;
 
     [Header("Player Detection State")]
     public float playerDetectDistance;
