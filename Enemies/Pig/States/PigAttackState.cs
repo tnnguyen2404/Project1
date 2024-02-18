@@ -38,7 +38,7 @@ public class PigAttackState : PigBaseState
         pig.stats.attackDetails[1] = pig.transform.position.x;
 
         foreach (Collider2D collider in detectedObjects) {
-            collider.transform.parent.SendMessage("TakeDamage", pig.stats.attackDetails);
+            collider.transform.SendMessage("TakeDamage", pig.stats.attackDetails);
         }
     }
 

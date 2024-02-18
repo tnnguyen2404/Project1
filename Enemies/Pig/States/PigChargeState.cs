@@ -15,14 +15,17 @@ public class PigChargeState : PigBaseState
 
     public override void LogicUpdate() {
         base.LogicUpdate();
-        if (!pig.CheckForPlayer() || pig.stats.chargeTime >= pig.stats.chargeDuration) {
-            ReturnToOriginalPos();
-        } else {
+            pig.stats.chargeTime = 0f;
+            Charge();
+
             if (pig.CheckForAttackRange()) {
                 pig.SwitchState(pig.attackState);
             }
-            Charge();
-        }
+
+            if (pig.stats.chargeTime >= pig.stats.chargeDuration || !pig.CheckForPlayer()) {
+                pig.SwitchState(pig.idleState);
+                ReturnToOriginalPos();
+            }
     }
 
     public override void PhysicsUpdate() {
@@ -34,15 +37,22 @@ public class PigChargeState : PigBaseState
     }
 
     void Charge() {
-        pig.rb.velocity = new Vector2(pig.stats.chargeSpeed * -pig.facingDirection, pig.rb.velocity.y);
+        pig.rb.velocity = new Vector2(pig.stats.chargeSpeed * pig.facingDirection, pig.rb.velocity.y);
         pig.stats.chargeTime += Time.deltaTime;
     }
 
     void ReturnToOriginalPos() {
-        pig.transform.position = Vector2.MoveTowards(pig.transform.position, pig.startPos, pig.stats.chargeSpeed * Time.deltaTime);
+        Vector2 direction = (pig.startPos - (Vector2)pig.transform.position).normalized;
+        pig.rb.velocity = direction * pig.stats.chargeSpeed;
         if ((Vector2)pig.transform.position == pig.startPos) {
             pig.stats.chargeTime = 0f;
-            pig.SwitchState(pig.idleState);
+            pig.rb.velocity = Vector2.zero;
         }
+    }
+
+    void FlipSprite() {
+        pig.facingDirection *= -1;
+        pig.isFacingRight = !pig.isFacingRight;
+        pig.transform.Rotate(0, 180, 0);
     }
 }

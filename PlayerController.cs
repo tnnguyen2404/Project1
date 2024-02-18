@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private bool isAttacking;
     private bool isFacingRight;
-    private float health = 90;
+    public float health = 90;
     private int attackDamage = 20;
     private float[] attackDetails = new float[2];
     private int enemyFacingDirection;
@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void KnockBack() {
-        rb.velocity = new Vector2(knockBackSpeedX * enemyFacingDirection, knockBackSpeedY);
+        rb.velocity = new Vector2(knockBackSpeedX * -enemyFacingDirection, knockBackSpeedY);
     }
 
     void Die() {

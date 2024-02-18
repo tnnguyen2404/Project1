@@ -32,6 +32,7 @@ public class PigController : MonoBehaviour
     public bool isJumping;
     public bool isAlive;
     public bool isAttacking;
+    public bool isCharging = false;
     public bool isFacingRight;
     public bool playerDetected;
     public bool playerInAttackRange;
@@ -107,7 +108,7 @@ public class PigController : MonoBehaviour
     }
 
     void OnDrawGizmos() {
-        Gizmos.DrawRay(wallCheck.position, (isFacingRight ? Vector2.right : Vector2.left) * 2);
+        Gizmos.DrawRay(wallCheck.position, (isFacingRight ? Vector2.right : Vector2.left) * 4);
         Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - 0.14f));
         Gizmos.DrawWireSphere(attackHitBoxPos.position, stats.attackRadius);
     }
