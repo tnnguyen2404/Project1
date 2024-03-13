@@ -12,20 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e927033f1344b60469a953a685d27548, type: 3}
   m_Name: Pig
   m_EditorClassIdentifier: 
+  deathParticle: {fileID: 0}
+  itemDrops:
+  - {fileID: 4681416592592369014, guid: b23772c700f8a3641856a44701894e58, type: 3}
+  - {fileID: 7464977067298602582, guid: bc470178e28239d4a97c79e621b7bc67, type: 3}
+  - {fileID: 5034473110912138976, guid: 3681a16eb1eb5d04cacaa330f548ded2, type: 3}
+  dropForce: 10
+  torque: 3
+  maxHealth: 100
   groundCheckDistance: 0.14
   wallCheckDistance: 3
-  moveSpeed: 3
+  moveSpeed: 1.5
   attackDamage: 15
-  attackRange: 0.5
+  attackRange: 1
   attackRadius: 0.3
   attackDetails:
   - 15
-  - 4.0569
-  health: 60
+  - 2.8683534
   jumpForce: 7
-  chargeSpeed: 4
-  chargeTime: 0
-  chargeDuration: 5
-  playerDetectDistance: 2
-  playerDetectedWaitTime: 1.5
+  chargeSpeed: 1.5
+  chargeTime: 0.30089995
+  chargeDuration: 3
+  playerDetectDistance: 4
+  playerDetectedWaitTime: 0.5
   detectionPauseTime: 1
+  knockBackSpeedX: 2
+  knockBackSpeedY: 2

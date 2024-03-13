@@ -11,11 +11,11 @@ public class PigChargeState : PigBaseState
 
     public override void Enter() {
         base.Enter();
+        pig.stats.chargeTime = 0f;
     }
 
     public override void LogicUpdate() {
         base.LogicUpdate();
-            pig.stats.chargeTime = 0f;
             Charge();
 
             if (pig.CheckForAttackRange()) {
@@ -23,8 +23,11 @@ public class PigChargeState : PigBaseState
             }
 
             if (pig.stats.chargeTime >= pig.stats.chargeDuration || !pig.CheckForPlayer()) {
-                pig.SwitchState(pig.idleState);
                 ReturnToOriginalPos();
+                if (Vector2.Distance(pig.transform.position, pig.startPos) < 0.1f) {
+                    pig.SwitchState(pig.idleState);
+                    FlipSprite();
+                }
             }
     }
 
@@ -44,7 +47,12 @@ public class PigChargeState : PigBaseState
     void ReturnToOriginalPos() {
         Vector2 direction = (pig.startPos - (Vector2)pig.transform.position).normalized;
         pig.rb.velocity = direction * pig.stats.chargeSpeed;
-        if ((Vector2)pig.transform.position == pig.startPos) {
+
+        if (direction.x > 0 && !pig.isFacingRight || direction.x < 0 && pig.isFacingRight) {
+            FlipSprite();
+        }
+
+        if (Vector2.Distance(pig.transform.position, pig.startPos) < 0.1f) {
             pig.stats.chargeTime = 0f;
             pig.rb.velocity = Vector2.zero;
         }

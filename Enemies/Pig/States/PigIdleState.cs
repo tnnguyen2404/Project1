@@ -24,6 +24,7 @@ public class PigIdleState : PigBaseState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        pig.rb.velocity = Vector2.zero;
     }
 
     public override void Exit()

@@ -12,6 +12,7 @@ public class PigGetHitState : PigBaseState
     public override void Enter()
     {
         base.Enter();
+        KnockBack();
     }
 
     public override void LogicUpdate()
@@ -27,5 +28,24 @@ public class PigGetHitState : PigBaseState
     public override void Exit()
     {
         base.Exit();
+    }
+
+    public override void AnimationAttackTrigger()
+    {
+        base.AnimationAttackTrigger();
+    }
+
+    public override void AnimaitonFinishedTrigger()
+    {
+        base.AnimaitonFinishedTrigger();
+        pig.SwitchState(pig.chargeState);
+    }
+
+    private void KnockBack() {
+        pig.rb.velocity = new Vector2 (pig.stats.knockBackSpeedX * pig.playerFacingDirection, pig.stats.knockBackSpeedY);
+    }
+
+    private void Die() {
+        //Destroy(gameObject);
     }
 }

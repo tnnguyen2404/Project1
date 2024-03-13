@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.Mathematics;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
+using Random = UnityEngine.Random;
 
 public class PigController : MonoBehaviour
 {
+    public PlayerController playerController;
     public PigBaseState currentState;
     public PigIdleState idleState;
     public PigChargeState chargeState;
@@ -13,6 +16,7 @@ public class PigController : MonoBehaviour
     public PigDetectPlayerState detectPlayerState;
     public PigAttackState attackState;
     public PigGetHitState getHitState;
+    public PigDeathState deathState;
     public Rigidbody2D rb;
     public Animator anim;
     public LayerMask whatIsGround, whatIsPlayer, whatIsDamageable;
@@ -20,10 +24,12 @@ public class PigController : MonoBehaviour
     public Transform attackHitBoxPos;
     public Transform player;
     public GameObject alert;
-    public StatsSO stats;
+    public PigStatsSO stats;
     public int facingDirection = 1;
     public Vector2 startPos;
     public Vector2 curPos;
+    public float curHealth;
+    public int playerFacingDirection;
     
     [Header("Boolean")]
     public bool isGrounded;
@@ -36,6 +42,7 @@ public class PigController : MonoBehaviour
     public bool isFacingRight;
     public bool playerDetected;
     public bool playerInAttackRange;
+    public bool applyKnockBack = true;
     
     [Header("State")]
     public float stateTime;
@@ -48,7 +55,7 @@ public class PigController : MonoBehaviour
         chargeState = new PigChargeState(this, "Charge");
         attackState = new PigAttackState(this, "Attack");
         getHitState = new PigGetHitState(this, "GetHit");
-
+        deathState = new PigDeathState(this, "Death");
 
         currentState = idleState;
         currentState.Enter();
@@ -58,6 +65,7 @@ public class PigController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         startPos = transform.position;
+        curHealth = stats.maxHealth;
     }
     void Update()
     {
@@ -87,6 +95,16 @@ public class PigController : MonoBehaviour
         return playerInAttackRange;
     }
 
+    private void TakeDamage(float[] attackDetails) {
+        curHealth -= attackDetails[0];
+        playerFacingDirection = playerController.GetFacingDirection();
+        if (curHealth > 0.1f && applyKnockBack) {
+            SwitchState(getHitState);
+        } else {
+            SwitchState(deathState);
+        }
+    }
+
     #region Other Functions
     public void SwitchState(PigBaseState newState) {
         currentState.Exit();
@@ -105,6 +123,13 @@ public class PigController : MonoBehaviour
 
     public int GetFacingDirection() {
         return facingDirection;
+    }
+
+    public void Instantiate(GameObject prefab, float torque, float dropForce) {
+        Rigidbody2D itemRb = Instantiate(prefab, transform.position, quaternion.identity).GetComponent<Rigidbody2D>();
+        Vector2 dropVelocity = new Vector2(Random.Range(0.5f,-0.5f), 1) * dropForce;
+        itemRb.AddForce(dropVelocity, ForceMode2D.Impulse);
+        itemRb.AddTorque(torque, ForceMode2D.Impulse);
     }
 
     void OnDrawGizmos() {

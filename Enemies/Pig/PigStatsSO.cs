@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "StatsSO")]
-public class StatsSO : ScriptableObject
+public class PigStatsSO : ScriptableObject
 {
+    [Header("Prefabs")]
+    public GameObject deathParticle;
+
+    [Header("Item Drop Variable")]
+    public GameObject[] itemDrops;
+    public float dropForce;
+    public float torque;
+
+    [Header("General Stats")]
+    public float maxHealth;
+
     [Header("Patrol State")]
     public float groundCheckDistance;
     public float wallCheckDistance;
@@ -15,9 +26,6 @@ public class StatsSO : ScriptableObject
     public float attackRange;
     public float attackRadius;
     public float[] attackDetails = new float[2];
-
-    [Header("Get Hit State")]
-    public float health;
     
     [Header("Jump State")]
     public float jumpForce;
@@ -31,4 +39,7 @@ public class StatsSO : ScriptableObject
     public float playerDetectDistance;
     public float playerDetectedWaitTime;
     public float detectionPauseTime;  
+
+    [Header("GetHit State")]
+    public float knockBackSpeedX, knockBackSpeedY;
 }

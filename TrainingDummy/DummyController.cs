@@ -38,7 +38,7 @@ public class DummyController : MonoBehaviour
         CheckKnockBack();
     }
 
-    private void Damage(float[] attackDetails) {
+    private void TakeDamage(float[] attackDetails) {
         currentHealth -= attackDetails[0];
         playerFacingDirection = pm.GetFacingDirection();
         
