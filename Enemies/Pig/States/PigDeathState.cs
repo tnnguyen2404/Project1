@@ -14,7 +14,7 @@ public class PigDeathState : PigBaseState
     {
         base.Enter();
         DropItems();
-        //pig.gameObject.SetActive(false);
+        pig.gameObject.SetActive(false);
     }
 
     public override void LogicUpdate()
@@ -37,8 +37,8 @@ public class PigDeathState : PigBaseState
     }
 
     private void DropItems() {
-        foreach (var items in pig.stats.itemDrops) {
-            pig.Instantiate(items, pig.stats.dropForce, pig.stats.torque);
+        foreach (var item in pig.stats.itemDrops) {
+            pig.Instantiate(item, pig.stats.dropForce, pig.stats.torque);
         }
     }
 }

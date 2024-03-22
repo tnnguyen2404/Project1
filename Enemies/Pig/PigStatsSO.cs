@@ -22,7 +22,7 @@ public class PigStatsSO : ScriptableObject
     public float moveSpeed;
 
     [Header("Attack State")]
-    public int attackDamage;
+    public float attackDamage;
     public float attackRange;
     public float attackRadius;
     public float[] attackDetails = new float[2];

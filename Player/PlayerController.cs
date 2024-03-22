@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,13 +10,18 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
 
     public PigController pigEnemy;
-    private float inputRaw = 0f;
-    private bool isAlive;
+    private float inputRaw;
+    private bool isAlive = true;
     private bool isMoving;
     private bool isJumping;
     private bool isAttacking;
+    private bool isAttacked;
     private bool isFacingRight;
-    public float health = 90;
+    public float maxHealth = 3;
+    public float curHealth;
+    public float numOfHeart;
+    public GameObject[] hearts;
+    public Animator[] heartAnim;
     private int attackDamage = 20;
     private float[] attackDetails = new float[2];
     private int enemyFacingDirection;
@@ -35,12 +41,15 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        curHealth = maxHealth;
+        InitializeHeartAnim();
     }
 
     void Update()
     {
         CheckInput();
         HandleAnimation();
+        Die();
     }
 
     void FixedUpdate() {
@@ -56,7 +65,6 @@ public class PlayerController : MonoBehaviour
         }
 
         if(Input.GetMouseButtonDown(0)) {
-            Attack();
             isAttacking = true;
         } else {
             isAttacking = false;
@@ -69,6 +77,15 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
         if (isAttacking) {
             anim.SetTrigger("Attack");
+        }
+
+        if (!isAlive) {
+            anim.SetTrigger("Dead");
+        }
+
+        if (isAttacked) {
+            anim.SetTrigger("GetHit");
+            isAttacked = false;
         }
     }
 
@@ -97,10 +114,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
-    void Attack() {
-
-    }
-
     void CheckAttackHitBox() {
         Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(AttackHitPosBox.position, attackRadius, whatIsDamageable);
         attackDetails[0] = attackDamage;
@@ -112,13 +125,13 @@ public class PlayerController : MonoBehaviour
     }
 
     void TakeDamage(float[] attackDetails) {
-        health -= attackDetails[0];
         enemyFacingDirection = pigEnemy.GetFacingDirection();
-        if (applyKnockBack && health > 0.0f) {
+        isAttacked = true;
+        if (applyKnockBack && curHealth > 0.0f) {  
+            curHealth -= attackDetails[0];
             KnockBack();
-        } else {
-            Die();
         }
+        UpdateHeartsUI();
     }
 
     void KnockBack() {
@@ -126,8 +139,12 @@ public class PlayerController : MonoBehaviour
     }
 
     void Die() {
-        Destroy(gameObject);
+        if (curHealth <= 0) {
+            isAlive = false;
+            StartCoroutine(DestroyPlayerGameObjAfterAnimation(1.0f));
+        }
     }
+        
 
     void FlipSprite() {
         facingDirection *= -1;
@@ -137,6 +154,52 @@ public class PlayerController : MonoBehaviour
 
     public int GetFacingDirection() {
         return facingDirection;
+    }
+
+    private void InitializeHeartAnim() {
+        heartAnim = new Animator[hearts.Length];
+        for (int i = 0; i < hearts.Length; i++) {
+            heartAnim[i] = hearts[i].GetComponent<Animator>();
+        }
+    }
+
+    private void UpdateHeartsUI() {
+        for (int i = 0; i < hearts.Length; i++) {
+            if (i < curHealth) {
+                hearts[i].SetActive(true);
+                if (!heartAnim[i].gameObject.activeSelf) {
+                    heartAnim[i].gameObject.SetActive(true);
+                    heartAnim[i].Play("Idle");
+                }
+            } else {
+                heartAnim[i].SetTrigger("Disappear");
+                StartCoroutine(DeactivateHeartAfterAnimation(0.15f, i));
+            }
+        }
+    }
+
+    private void GainHeart() {
+        if (curHealth < maxHealth) {
+            curHealth++;
+            UpdateHeartsUI();
+        }
+    }
+
+    private IEnumerator DeactivateHeartAfterAnimation(float delay, int index) {
+        yield return new WaitForSeconds(delay);
+        hearts[index].SetActive(false);
+    }
+
+    private IEnumerator DestroyPlayerGameObjAfterAnimation(float delay) {
+        yield return new WaitForSeconds(delay);
+        Destroy(this.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Heart")) {
+            GainHeart();
+            Destroy(other.gameObject);
+        }
     }
 
     void OnDrawGizmos() {
