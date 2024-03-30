@@ -24,14 +24,14 @@ MonoBehaviour:
   wallCheckDistance: 3
   moveSpeed: 1.5
   attackDamage: 1
-  attackRange: 1
+  attackRange: 0.5
   attackRadius: 0.3
   attackDetails:
   - 1
-  - 4.3965006
+  - 2.8965623
   jumpForce: 7
   chargeSpeed: 1.5
-  chargeTime: 2.9901605
+  chargeTime: 0.0043443
   chargeDuration: 3
   playerDetectDistance: 4
   playerDetectedWaitTime: 0.5

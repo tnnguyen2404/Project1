@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PigStatsSO")]
-public class PigStatsSO : ScriptableObject
+[CreateAssetMenu(menuName = "PigThrowingBoxStatsSO")]
+public class PigThrowingBoxStatsSO : ScriptableObject
 {
     [Header("Prefabs")]
     public GameObject deathParticle;
@@ -16,24 +16,12 @@ public class PigStatsSO : ScriptableObject
     [Header("General Stats")]
     public float maxHealth;
 
-    [Header("Patrol State")]
+    [Header("CheckSurrounding")]
     public float groundCheckDistance;
     public float wallCheckDistance;
-    public float moveSpeed;
 
     [Header("Attack State")]
-    public float attackDamage;
     public float attackRange;
-    public float attackRadius;
-    public float[] attackDetails = new float[2];
-    
-    [Header("Jump State")]
-    public float jumpForce;
-
-    [Header("Charge State")]
-    public float chargeSpeed;
-    public float chargeTime;
-    public float chargeDuration;
 
     [Header("Player Detection State")]
     public float playerDetectDistance;

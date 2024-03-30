@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float knockBackSpeedX, knockBackSpeedY;
+    [SerializeField] Vector2 deathKick = new Vector2(15f,15f);
 
     void Start()
     {
@@ -47,9 +48,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        CheckInput();
-        HandleAnimation();
         Die();
+        HandleAnimation();
+        if (!isAlive) {return;}
+        CheckInput();
     }
 
     void FixedUpdate() {
@@ -130,7 +132,7 @@ public class PlayerController : MonoBehaviour
         if (applyKnockBack && curHealth > 0.0f) {  
             curHealth -= attackDetails[0];
             KnockBack();
-        }
+        } 
         UpdateHeartsUI();
     }
 
@@ -141,6 +143,7 @@ public class PlayerController : MonoBehaviour
     void Die() {
         if (curHealth <= 0) {
             isAlive = false;
+            //rb.velocity = deathKick;
             StartCoroutine(DestroyPlayerGameObjAfterAnimation(1.0f));
         }
     }
