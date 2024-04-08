@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PigIdleState : PigBaseState
+public class PigThrowingBoxChargeState : PigThrowingBoxBaseState
 {
-    public PigIdleState(PigController pig, string animName) : base (pig, animName)
+    public PigThrowingBoxChargeState(PigThrowingBoxController pigThrowing, string animName) : base (pigThrowing, animName) 
     {
-       
+
     }
+
     public override void Enter()
     {
         base.Enter();
@@ -16,9 +17,6 @@ public class PigIdleState : PigBaseState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (pig.CheckForPlayer()) {
-            pig.SwitchState(pig.detectPlayerState);
-        }
     }
 
     public override void PhysicsUpdate()

@@ -12,8 +12,14 @@ public class PigThrowingBoxController : MonoBehaviour
     public PigThrowingBoxStatsSO stats;
     public PigThrowingBoxBaseState currentState;
     public PigThrowingBoxIdleState idleState;
+    public PigThrowingBoxDetectPlayerState playerDetectedState;
+    public PigThrowingBoxAttackState attackState;
+    public PigThrowingBoxPickingUpBoxState pickingUpBoxState;
+    public PigThrowingBoxChargeState chargeState;
+    public GameObject alert;
     public Transform player;
     public int facingDirection = -1;
+    public float stateTime;
 
     [Header("Boolean")]
     public bool playerDetected;
@@ -27,6 +33,10 @@ public class PigThrowingBoxController : MonoBehaviour
 
     void Awake() {
         idleState = new PigThrowingBoxIdleState(this, "Idle");
+        playerDetectedState = new PigThrowingBoxDetectPlayerState(this, "PlayerDetected");
+        pickingUpBoxState = new PigThrowingBoxPickingUpBoxState(this, "PickingUpBox");
+        chargeState = new PigThrowingBoxChargeState(this, "Charge");
+        attackState = new PigThrowingBoxAttackState(this, "Attack");
         currentState = idleState;
         currentState.Enter();
     }
@@ -42,7 +52,12 @@ public class PigThrowingBoxController : MonoBehaviour
         currentState.PhysicsUpdate();
     }
     public bool CheckForPlayer() {
-        playerDetected = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.playerDetectDistance, whatIsPlayer);
+        float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
+        if (distanceFromPlayer < stats.playerDetectDistance) {
+            playerDetected = true;
+        } else {
+            playerDetected = false;
+        }
         return playerDetected;
     }
 
@@ -53,7 +68,7 @@ public class PigThrowingBoxController : MonoBehaviour
 
     public bool CheckForAttackRange() {  
         float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
-        if (distanceFromPlayer < stats.playerDetectDistance) {
+        if (distanceFromPlayer < stats.attackRange) {
             playerInAttackRange = true;
         } else {
             playerInAttackRange = false;
@@ -61,8 +76,21 @@ public class PigThrowingBoxController : MonoBehaviour
         return playerInAttackRange;
     }
 
+    public void SwitchState(PigThrowingBoxBaseState newState) {
+        currentState.Exit();
+        currentState = newState;
+        currentState.Enter();
+        stateTime = Time.time;
+    }
+
+    public int GetFacingDirection() {
+        return facingDirection;
+    }
+
     void OnDrawGizmos() {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, stats.playerDetectDistance);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, stats.attackRange);
     }
 }

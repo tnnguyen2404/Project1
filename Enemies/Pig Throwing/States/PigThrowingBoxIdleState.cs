@@ -17,6 +17,9 @@ public class PigThrowingBoxIdleState : PigThrowingBoxBaseState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        if (pigThrowing.CheckForPlayer()) {
+            pigThrowing.SwitchState(pigThrowing.playerDetectedState);
+        }
     }
 
     public override void PhysicsUpdate()

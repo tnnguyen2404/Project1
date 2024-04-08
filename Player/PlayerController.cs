@@ -198,8 +198,12 @@ public class PlayerController : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Heart")) {
+    void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.CompareTag("SmallHeart")) {
+            GainHeart();
+            Destroy(other.gameObject);
+        } else if (other.gameObject.CompareTag("BigHeart")) {
+            GainHeart();
             GainHeart();
             Destroy(other.gameObject);
         }

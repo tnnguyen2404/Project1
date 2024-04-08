@@ -12,3 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6d0c2341dcb1a64db419e41cc44439b, type: 3}
   m_Name: PigThrowingBox
   m_EditorClassIdentifier: 
+  deathParticle: {fileID: 0}
+  itemDrops: []
+  dropForce: 0
+  torque: 0
+  maxHealth: 0
+  groundCheckDistance: 0.14
+  wallCheckDistance: 3
+  attackRange: 4
+  playerDetectDistance: 6
+  playerDetectedWaitTime: 1
+  detectionPauseTime: 1
+  knockBackSpeedX: 0
+  knockBackSpeedY: 0

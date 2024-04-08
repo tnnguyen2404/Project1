@@ -23,11 +23,19 @@ public class PigThrowingBoxStatsSO : ScriptableObject
     [Header("Attack State")]
     public float attackRange;
 
+    [Header("Charge State")]
+    public float chargeSpeed;
+    public float chargeTime;
+    public float chargeDuration;
+
     [Header("Player Detection State")]
     public float playerDetectDistance;
     public float playerDetectedWaitTime;
     public float detectionPauseTime;  
 
+    [Header("Picking Up Box State")]
+    public float pickingUpBoxWaitTime;
+    
     [Header("GetHit State")]
     public float knockBackSpeedX, knockBackSpeedY;
 }
