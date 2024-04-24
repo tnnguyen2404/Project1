@@ -12,13 +12,13 @@ public class PigThrowingBoxIdleState : PigThrowingBoxBaseState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log (animName);
     }
-
     public override void LogicUpdate()
     {
         base.LogicUpdate();
         if (pigThrowing.CheckForPlayer()) {
-            pigThrowing.SwitchState(pigThrowing.playerDetectedState);
+            pigThrowing.SwitchState(pigThrowing.findingBoxState);
         }
     }
 

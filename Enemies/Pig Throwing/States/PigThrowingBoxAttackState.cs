@@ -12,6 +12,7 @@ public class PigThrowingBoxAttackState : PigThrowingBoxBaseState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log(animName);
     }
 
     public override void LogicUpdate()

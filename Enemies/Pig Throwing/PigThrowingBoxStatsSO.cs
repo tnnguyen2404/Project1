@@ -35,6 +35,14 @@ public class PigThrowingBoxStatsSO : ScriptableObject
 
     [Header("Picking Up Box State")]
     public float pickingUpBoxWaitTime;
+
+    [Header("Picking Up Box Idle State")]
+    public float idleTime;
+    public float pickingUpBoxRange;
+
+    [Header("Finding Box State")]
+    public float findingBoxDistance;
+    public float runSpeed;
     
     [Header("GetHit State")]
     public float knockBackSpeedX, knockBackSpeedY;

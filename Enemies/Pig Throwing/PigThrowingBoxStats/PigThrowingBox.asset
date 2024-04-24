@@ -16,12 +16,17 @@ MonoBehaviour:
   itemDrops: []
   dropForce: 0
   torque: 0
-  maxHealth: 0
+  maxHealth: 100
   groundCheckDistance: 0.14
   wallCheckDistance: 3
   attackRange: 4
+  chargeSpeed: 0
+  chargeTime: 0
+  chargeDuration: 0
   playerDetectDistance: 6
-  playerDetectedWaitTime: 1
+  playerDetectedWaitTime: 3
   detectionPauseTime: 1
+  pickingUpBoxWaitTime: 2
+  idleTime: 0
   knockBackSpeedX: 0
   knockBackSpeedY: 0

@@ -12,6 +12,7 @@ public class PigThrowingBoxDetectPlayerState : PigThrowingBoxBaseState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log(animName);
         pigThrowing.alert.SetActive(true);
     }
 
