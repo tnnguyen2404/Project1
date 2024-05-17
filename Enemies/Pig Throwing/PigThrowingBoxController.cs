@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Pathfinding;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,6 +24,12 @@ public class PigThrowingBoxController : MonoBehaviour
     public int facingDirection = -1;
     public float stateTime;
     public Vector3 closestBoxPos;
+    public Path path;
+    public int currentWaypoint = 0;
+    public float nextWaypointDistance = 3f;
+    public bool reachedEndofPath = false;
+    public Transform target;
+    public Seeker seeker;
 
     [Header("Boolean")]
     public bool playerDetected;
@@ -30,7 +37,7 @@ public class PigThrowingBoxController : MonoBehaviour
     public bool isTouchingWall;
     public bool isMoving;
     public bool isAlive;
-    public bool isFacingRight;
+    public bool isFacingRight = false;
     public bool playerInAttackRange;
     public bool isAttacking;
     public bool boxIsNearBy;
@@ -50,10 +57,12 @@ public class PigThrowingBoxController : MonoBehaviour
     void Start() {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        seeker = GetComponent<Seeker>();
     }
 
     void Update() {
         currentState.LogicUpdate();
+        CheckForGround();
     }
     void FixedUpdate() {
         currentState.PhysicsUpdate();
@@ -111,6 +120,12 @@ public class PigThrowingBoxController : MonoBehaviour
         return false;
     }
 
+    public void OnPathComplete(Path p) {
+        if (!p.error) {
+            path = p;
+            currentWaypoint = 0;
+        }
+    }
     public bool CheckForPickUpRange() {
         isInPickUpRange = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.pickingUpBoxRange, whatIsObject);
         return isInPickUpRange;
@@ -134,5 +149,7 @@ public class PigThrowingBoxController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, stats.attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x - 3, wallCheck.position.y));
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - 0.14f));
     }
 }

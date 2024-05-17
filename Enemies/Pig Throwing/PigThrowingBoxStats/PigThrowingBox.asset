@@ -17,16 +17,21 @@ MonoBehaviour:
   dropForce: 0
   torque: 0
   maxHealth: 100
-  groundCheckDistance: 0.14
+  jumpForce: 20
+  groundCheckDistance: 0.15
   wallCheckDistance: 3
   attackRange: 4
   chargeSpeed: 0
   chargeTime: 0
   chargeDuration: 0
   playerDetectDistance: 6
-  playerDetectedWaitTime: 3
+  playerDetectedWaitTime: 2
   detectionPauseTime: 1
   pickingUpBoxWaitTime: 2
-  idleTime: 0
+  idleTime: 1
+  pickingUpBoxRange: 0.3
+  findingBoxDistance: 5
+  runSpeed: 1.5
+  jumpRange: 2
   knockBackSpeedX: 0
   knockBackSpeedY: 0
