@@ -22,9 +22,9 @@ public class PigThrowingBoxHoldingBoxIdleState : PigThrowingBoxBaseState
         base.LogicUpdate();
         if (pigThrowing.CheckForAttackRange()) {
             pigThrowing.SwitchState(pigThrowing.attackState);
-        } else {
+        } else if (!pigThrowing.CheckForAttackRange() && pigThrowing.CheckForPlayer()) {
             pigThrowing.SwitchState(pigThrowing.chargeState);
-        }
+        } 
     }
 
     public override void PhysicsUpdate()

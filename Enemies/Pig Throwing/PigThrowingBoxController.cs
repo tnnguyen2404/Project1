@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Pathfinding;
 using UnityEditor;
 using UnityEngine;
+using PathBerserker2d;
 
 public class PigThrowingBoxController : MonoBehaviour
 {
@@ -21,15 +21,19 @@ public class PigThrowingBoxController : MonoBehaviour
     public PigThrowingBoxFindingBoxState findingBoxState;
     public GameObject alert;
     public Transform player;
+    public Transform target;
+    public NavAgent agent;
     public int facingDirection = -1;
     public float stateTime;
-    public Vector3 closestBoxPos;
-    public Path path;
-    public int currentWaypoint = 0;
-    public float nextWaypointDistance = 3f;
-    public bool reachedEndofPath = false;
-    public Transform target;
-    public Seeker seeker;
+    public float timeOnLink;
+    public float timeToCompleteLink;
+    public Vector2 direction;
+    public int state = 0;
+    private Transform elevatorTrans;
+    public float deltaDistance;
+    public bool handleLinkMovement;
+    public int minNumberOfLinkExecutions;
+    public Vector2 storedLinkStart;
 
     [Header("Boolean")]
     public bool playerDetected;
@@ -42,6 +46,8 @@ public class PigThrowingBoxController : MonoBehaviour
     public bool isAttacking;
     public bool boxIsNearBy;
     public bool isInPickUpRange;
+    public bool reachedEndofPath = false;
+    public bool isJumping;
 
     void Awake() {
         idleState = new PigThrowingBoxIdleState(this, "Idle");
@@ -57,12 +63,11 @@ public class PigThrowingBoxController : MonoBehaviour
     void Start() {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        seeker = GetComponent<Seeker>();
+        agent = GetComponent<NavAgent>();
     }
 
     void Update() {
         currentState.LogicUpdate();
-        CheckForGround();
     }
     void FixedUpdate() {
         currentState.PhysicsUpdate();
@@ -91,41 +96,6 @@ public class PigThrowingBoxController : MonoBehaviour
         }
         return playerInAttackRange;
     }
-
-    public bool CheckForBoxNearBy(out Vector3 boxPos) {
-        GameObject[] boxes = GameObject.FindGameObjectsWithTag("Box");
-
-        if (boxes.Length == 0) {
-            boxPos = Vector3.zero;
-            return false;
-        }
-
-        GameObject closestBox = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (GameObject box in boxes) {
-            float distance = Vector2.Distance(transform.position, box.transform.position);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestBox = box;
-            }
-        }
-
-        if (closestDistance <= stats.findingBoxDistance) {
-            boxPos = closestBox.transform.position;
-            return true;
-        }
-
-        boxPos = Vector3.zero;
-        return false;
-    }
-
-    public void OnPathComplete(Path p) {
-        if (!p.error) {
-            path = p;
-            currentWaypoint = 0;
-        }
-    }
     public bool CheckForPickUpRange() {
         isInPickUpRange = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, stats.pickingUpBoxRange, whatIsObject);
         return isInPickUpRange;
@@ -144,11 +114,7 @@ public class PigThrowingBoxController : MonoBehaviour
 
     void OnDrawGizmos() {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, stats.playerDetectDistance);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, stats.attackRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x - 3, wallCheck.position.y));
+        Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x - 0.3f, wallCheck.position.y));
         Gizmos.color = Color.white;
         Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - 0.14f));
     }

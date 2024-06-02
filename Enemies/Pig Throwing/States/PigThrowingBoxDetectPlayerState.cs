@@ -21,7 +21,8 @@ public class PigThrowingBoxDetectPlayerState : PigThrowingBoxBaseState
         base.LogicUpdate();
         if (Time.time >= pigThrowing.stateTime + pigThrowing.stats.playerDetectedWaitTime) {
             pigThrowing.SwitchState(pigThrowing.findingBoxState);
-        }
+        } 
+           
     }
 
     public override void PhysicsUpdate()
