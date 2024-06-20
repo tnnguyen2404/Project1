@@ -19,9 +19,15 @@ public class PigThrowingBoxDetectPlayerState : PigThrowingBoxBaseState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (Time.time >= pigThrowing.stateTime + pigThrowing.stats.playerDetectedWaitTime) {
+        if (Time.time >= pigThrowing.stateTime + pigThrowing.stats.playerDetectedWaitTime && !pigThrowing.boxHasBeenPickedUp) {
             pigThrowing.SwitchState(pigThrowing.findingBoxState);
-        } 
+        } else if (Time.time >= pigThrowing.stateTime + pigThrowing.stats.playerDetectedWaitTime && pigThrowing.boxHasBeenPickedUp) {
+            if (pigThrowing.CheckForPlayer() && !pigThrowing.CheckForAttackRange()) {
+                pigThrowing.SwitchState(pigThrowing.chargeState);
+            } else if (pigThrowing.CheckForPlayer() && pigThrowing.CheckForAttackRange()) {
+                pigThrowing.SwitchState(pigThrowing.attackState);
+            }
+        }
            
     }
 

@@ -26,4 +26,12 @@ public class PigThrowingBoxBaseState
     public virtual void Exit() {
         pigThrowing.anim.SetBool(animName, false);
     }
+
+    public virtual void AnimationAttackTrigger() {
+
+    }
+
+    public virtual void AnimaitonFinishedTrigger() {
+        
+    }
 }

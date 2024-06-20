@@ -21,11 +21,13 @@ public class PlayerController : MonoBehaviour
     public float numOfHeart;
     public GameObject[] hearts;
     public Animator[] heartAnim;
-    private int attackDamage = 20;
+    private int attackDamage = 1;
     private float[] attackDetails = new float[2];
     private int enemyFacingDirection;
     public int facingDirection = 1;
     public float groundCheckRadius;
+    public float attackCooldown;
+    public float attackTimer = 1.1f;
     public Transform GroundCheck;
     public Transform AttackHitPosBox;
     public LayerMask whatIsGround, whatIsDamageable;
@@ -51,6 +53,7 @@ public class PlayerController : MonoBehaviour
         HandleAnimation();
         if (!isAlive) {return;}
         CheckInput();
+        attackTimer += Time.deltaTime;
     }
 
     void FixedUpdate() {
@@ -76,8 +79,9 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isMoving", isMoving);
         anim.SetFloat("yVelocity", rb.velocity.y);       
         anim.SetBool("isGrounded", isGrounded);
-        if (isAttacking) {
+        if (isAttacking && attackTimer >= attackCooldown) {
             anim.SetTrigger("Attack");
+            attackTimer = 0;
         }
 
         if (!isAlive) {

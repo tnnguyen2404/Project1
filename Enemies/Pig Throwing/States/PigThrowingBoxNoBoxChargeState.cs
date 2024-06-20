@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PathBerserker2d;
-public class PigThrowingBoxChargeState : PigThrowingBoxBaseState
+
+public class PigThrowingBoxNoBoxChargeState : PigThrowingBoxBaseState
 {
-    public PigThrowingBoxChargeState(PigThrowingBoxController pigThrowing, string animName) : base (pigThrowing, animName) 
+    public PigThrowingBoxNoBoxChargeState(PigThrowingBoxController pigThrowing, string animName) : base (pigThrowing, animName) 
     {
 
     }
@@ -12,35 +12,41 @@ public class PigThrowingBoxChargeState : PigThrowingBoxBaseState
     public override void Enter()
     {
         base.Enter();
-        pigThrowing.target = pigThrowing.player.transform;
+        Debug.Log(animName);
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        pigThrowing.target = pigThrowing.player.transform;
+        
         if (pigThrowing.target == null)
             return;
 
         Vector2 targetPos = pigThrowing.GetTargetPosition();
         float distToTarget = Vector2.Distance(pigThrowing.transform.position, targetPos);
 
-        if (distToTarget > pigThrowing.stats.attackRange && 
+        if (distToTarget > pigThrowing.stats.meleeAttackRange && 
             !(pigThrowing.agent.PathGoal.HasValue &&  Vector2.Distance(pigThrowing.agent.PathGoal.Value, targetPos) <= pigThrowing.stats.travelStopRadius))
         {
             if (!pigThrowing.agent.UpdatePath(targetPos) && pigThrowing.stats.targetPredictionTime > 0)
             {
                 pigThrowing.agent.UpdatePath(pigThrowing.target.position);
             }
-        } else if (distToTarget <= pigThrowing.stats.attackRange)
+        } else if (distToTarget <= pigThrowing.stats.meleeAttackRange)
         {
             pigThrowing.agent.Stop();
-            pigThrowing.SwitchState(pigThrowing.attackState);
-        }    
+            pigThrowing.SwitchState(pigThrowing.meleeAttackState);
+        } 
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        pigThrowing.agent.OnStartLinkTraversal += pigThrowing.Agent_StartLinkTraversalEvent;
+        pigThrowing.agent.OnStartSegmentTraversal += pigThrowing.Agent_OnStartSegmentTraversal;
+        pigThrowing.agent.OnLinkTraversal += pigThrowing.Agent_OnLinkTraversal;
+        pigThrowing.agent.OnSegmentTraversal += pigThrowing.Agent_OnSegmentTraversal;
     }
 
     public override void Exit()

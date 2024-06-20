@@ -16,26 +16,40 @@ MonoBehaviour:
   itemDrops: []
   dropForce: 0
   torque: 0
-  maxHealth: 100
-  jumpSpeed: 0.03
+  maxHealth: 5
+  curHealth: 5
+  jumpSpeed: 0.01
   fallSpeed: 0.01
   groundCheckDistance: 0.15
   wallCheckDistance: 3
-  attackRange: 4
+  attackRange: 3.5
+  numberOfBoxesLeft: 0
+  boxSpeed: 300
+  timer: 0.0115179
   chargeSpeed: 0
   chargeTime: 0
-  chargeDuration: 0
+  chargeDuration: 3
   closeEnoughRadius: 0
-  travelStopRadius: 0
+  travelStopRadius: 1
   targetPredictionTime: 0
   playerDetectDistance: 6
   playerDetectedWaitTime: 1
   detectionPauseTime: 1
   pickingUpBoxWaitTime: 2
   idleTime: 1
-  pickingUpBoxRange: 0.6
+  pickingUpBoxRange: 0.7
   findingBoxDistance: 5
-  runSpeed: 0.015
+  runSpeed: 0.01
   jumpRange: 2
-  knockBackSpeedX: 0
-  knockBackSpeedY: 0
+  knockBackSpeedX: 2
+  knockBackSpeedY: 1
+  dodgeForce: 3
+  dodgeAngle: {x: 1, y: 1}
+  dodgeDetectDistance: 1
+  noBoxChargeSpeed: 0.003
+  meleeAttackRange: 0.9
+  meleeAttackRadius: 0.3
+  meleeAttackDamage: 1
+  attackDetails:
+  - 1
+  - -2.8256943
